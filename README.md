@@ -20,3 +20,6 @@ The client will try to connect using OAuth, after you successfully sign-in it wi
 
 After successful connection, the script will enumerate and print all available tools. Then you can select 1-X tool and either describe it (which will pull all info from server) or call it.
 In the calling screen every expected argument is present with their description, you just need to input the values, if left empty the argument is not set
+
+# Disclaimer
+Tools is mostly based on the [mcp_simple_auth_client](https://github.com/modelcontextprotocol/python-sdk/blob/main/examples/clients/simple-auth-client/mcp_simple_auth_client/main.py) of the official MCP python-sdk 
