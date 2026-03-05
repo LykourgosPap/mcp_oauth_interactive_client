@@ -427,11 +427,24 @@ class SimpleAuthClient:
                                         final_arguments[arg_name] = float(user_val)
                                     elif arg_type == "boolean":
                                         final_arguments[arg_name] = user_val.lower() in ('true', '1', 'yes')
-                                    elif arg_type == "array" or arg_type == "object":
-                                        try:
-                                            final_arguments[arg_name] = json.loads(user_val)
-                                        except:
-                                            final_arguments[arg_name] = user_val
+                                    elif arg_type == "array":
+                                        items_schema = arg_schema.get("items", {})
+                                        items_type = items_schema.get("type", "string")
+                                        if items_type == "object":
+                                            parsed = json.loads(user_val)
+                                            if not isinstance(parsed, list):
+                                                parsed = [parsed]
+                                            final_arguments[arg_name] = parsed
+                                        else:
+                                            # Simple types: split by comma or space
+                                            parts = [v.strip() for v in user_val.replace(",", " ").split() if v.strip()]
+                                            if items_type == "integer":
+                                                parts = [int(p) for p in parts]
+                                            elif items_type == "number":
+                                                parts = [float(p) for p in parts]
+                                            final_arguments[arg_name] = parts
+                                    elif arg_type == "object":
+                                        final_arguments[arg_name] = json.loads(user_val)
                                     else:
                                         final_arguments[arg_name] = user_val
                                 except ValueError:
